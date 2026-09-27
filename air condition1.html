@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Central Air Conditioning System Simulation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #030712;
+            color: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #38bdf8;
+            margin-bottom: 5px;
+            text-align: center;
+            font-size: 28px;
+        }
+        p.subtitle {
+            color: #9ca3af;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .main-wrapper {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            width: 1050px;
+            max-width: 100%;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .metric-card {
+            background: #1f2937;
+            border: 1px solid #374151;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .metric-card span {
+            display: block;
+            font-size: 20px;
+            font-weight: bold;
+            color: #38bdf8;
+            margin-top: 5px;
+        }
+        .metric-card label {
+            font-size: 11px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .flow-status-banner {
+            background: #1e1b4b;
+            border: 1px solid #312e81;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 15px;
+            color: #818cf8;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        .topology-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .topo-module {
+            background: #1f2937;
+            border: 2px solid #374151;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: left;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .topo-module.active {
+            border-color: #38bdf8;
+            background: #0c203b;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
+        }
+        .topo-module h3 {
+            margin-top: 0;
+            font-size: 17px;
+            color: #f3f4f6;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .topo-module p {
+            font-size: 13px;
+            color: #9ca3af;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        .status-indicator {
+            font-size: 12px;
+            font-weight: bold;
+            color: #ef4444;
+        }
+        .topo-module.active .status-indicator {
+            color: #34d399;
+        }
+        .control-panel {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            border-top: 1px solid #1f2937;
+            padding-top: 25px;
+        }
+        .action-btn {
+            padding: 14px 35px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        #masterPowerBtn {
+            background-color: #ef4444;
+            color: white;
+        }
+        #masterPowerBtn.running {
+            background-color: #22c55e;
+        }
+        .specs-list {
+            font-size: 12px;
+            color: #d1d5db;
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0 0;
+            border-top: 1px dashed #374151;
+            padding-top: 8px;
+        }
+        .specs-list li {
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <h1>Central Air Conditioning System</h1>
+        <p class="subtitle">Comprehensive Enterprise HVAC Topology & Plant Simulation</p>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <label>System Status</label>
+                <span id="txtState">OFFLINE</span>
+            </div>
+            <div class="metric-card">
+                <label>Zone Temperature</label>
+                <span id="txtTemp">28.0°C</span>
+            </div>
+            <div class="metric-card">
+                <label>Chilled Water Flow</label>
+                <span id="txtWater">0.0 GPM</span>
+            </div>
+            <div class="metric-card">
+                <label>AHU Blower Speed</label>
+                <span id="txtAhu">0 RPM</span>
+            </div>
+        </div>
+
+        <div class="flow-status-banner" id="txtBanner">
+            System is currently in Standby mode. Click 'Start Plant Operation' to initiate the full loop sequence.
+        </div>
+
+        <div class="topology-container">
+            <!-- Module 1 -->
+            <div class="topo-module" id="mod1">
+                <h3><span>🏢</span> 1. Central Plant & Chillers</h3>
+                <p>Produces chilled and hot media via large-scale industrial chillers, boilers, and cooling towers[cite: 3].</p>
+                <div class="status-indicator" id="st1">Status: Standby</div>
+                <ul class="specs-list">
+                    <li>• Equipment: Centrifugal Chillers</li>
+                    <li>• Output: 6.5°C Chilled Water</li>
+                </ul>
+            </div>
+
+            <!-- Module 2 -->
+            <div class="topo-module" id="mod2">
+                <h3><span>⚡</span> 2. Cooling/Heating Pumps & BMS</h3>
+                <p>Primary & secondary distribution pumps managed centrally by a Building Management System (BMS)[cite: 3].</p>
+                <div class="status-indicator" id="st2">Status: Standby</div>
+                <ul class="specs-list">
+                    <li>• Flow Rate: Variable Frequency Drive</li>
+                    <li>• Monitoring: Automated Sensors</li>
+                </ul>
+            </div>
+
+            <!-- Module 3 -->
+            <div class="topo-module" id="mod3">
+                <h3><span>🔄</span> 3. Air Handling Unit (AHU)</h3>
+                <p>Conditions and circulates air by passing outdoor and return air through chilled water heat exchanger coils[cite: 3].</p>
+                <div class="status-indicator" id="st3">Status: Standby</div>
+                <ul class="specs-list">
+                    <li>• Filtration: MERV 13 Filters</li>
+                    <li>• Coil Exchange: Active Heat Transfer</li>
+                </ul>
+            </div>
+
+            <!-- Module 4 -->
+            <div class="topo-module" id="mod4">
+                <h3><span>🌀</span> 4. Duct Distribution Network</h3>
+                <p>Delivers conditioned air smoothly through a vast network of insulated supply ducts and diffusers[cite: 3].</p>
+                <div class="status-indicator" id="st4">Status: Standby</div>
+                <ul class="specs-list">
+                    <li>• Insulation: Fiberglass Acoustic Wrap</li>
+                    <li>• Velocity: Optimized Air Delivery</li>
+                </ul>
+            </div>
+
+            <!-- Module 5 -->
+            <div class="topo-module" id="mod5">
+                <h3><span>🏫</span> 5. Conditioned Rooms / Zones</h3>
+                <p>Serves occupant zones across multiple floors uniformly, maintaining precise thermal comfort[cite: 3].</p>
+                <div class="status-indicator" id="st5">Status: Standby</div>
+                <ul class="specs-list">
+                    <li>• Coverage: Multi-Zone Building</li>
+                    <li>• Comfort Level: High Precision</li>
+                </ul>
+            </div>
+
+            <!-- Module 6 -->
+            <div class="topo-module" id="mod6">
+                <h3><span>🔙</span> 6. Return Air Plenum</h3>
+                <p>Collects used indoor air, routing it back through return plenums to complete the continuous closed loop[cite: 3].</p>
+                <div class="status-indicator" id="st6">Status: Standby</div>
+                <ul class="specs-list">
+                    <li>• Recirculation: Energy Recovery</li>
+                    <li>• Air Quality: Continuous Fresh Mix</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <button class="action-btn" id="masterPowerBtn" onclick="toggleSimulation()">Start Plant Operation</button>
+        </div>
+    </div>
+
+    <script>
+        let isSystemActive = false;
+        let currentRoomTemp = 28.0;
+        let simulationTimer;
+
+        function toggleSimulation() {
+            isSystemActive = !isSystemActive;
+            const btn = document.getElementById('masterPowerBtn');
+            const txtState = document.getElementById('txtState');
+            const txtTemp = document.getElementById('txtTemp');
+            const txtWater = document.getElementById('txtWater');
+            const txtAhu = document.getElementById('txtAhu');
+            const txtBanner = document.getElementById('txtBanner');
+
+            const modules = [
+                { mod: document.getElementById('mod1'), st: document.getElementById('st1') },
+                { mod: document.getElementById('mod2'), st: document.getElementById('st2') },
+                { mod: document.getElementById('mod3'), st: document.getElementById('st3') },
+                { mod: document.getElementById('mod4'), st: document.getElementById('st4') },
+                { mod: document.getElementById('mod5'), st: document.getElementById('st5') },
+                { mod: document.getElementById('mod6'), st: document.getElementById('st6') }
+            ];
+
+            if (isSystemActive) {
+                btn.innerText = "Shut Down Plant";
+                btn.classList.add('running');
+                txtState.innerText = "RUNNING";
+                txtState.style.color = "#34d399";
+                txtWater.innerText = "350.0 GPM";
+                txtAhu.innerText = "1850 RPM";
+                txtBanner.innerText = "Active Central Loop: Central Plant ➔ Pumps ➔ AHU ➔ Ducts ➔ Conditioned Rooms ➔ Return Air Plenum";
+
+                modules.forEach((item, index) => {
+                    setTimeout(() => {
+                        if (isSystemActive) {
+                            item.mod.classList.add('active');
+                            item.st.innerText = "Status: Operational";
+                        }
+                    }, index * 350);
+                });
+
+                simulationTimer = setInterval(() => {
+                    if (currentRoomTemp > 21.5) {
+                        currentRoomTemp -= 0.35;
+                        txtTemp.innerText = currentRoomTemp.toFixed(1) + "°C";
+                    }
+                }, 700);
+
+            } else {
+                btn.innerText = "Start Plant Operation";
+                btn.classList.remove('running');
+                txtState.innerText = "OFFLINE";
+                txtState.style.color = "#f3f4f6";
+                txtTemp.innerText = "28.0°C";
+                txtWater.innerText = "0.0 GPM";
+                txtAhu.innerText = "0 RPM";
+                txtBanner.innerText = "System is currently in Standby mode. Click 'Start Plant Operation' to initiate the full loop sequence.";
+
+                modules.forEach(item => {
+                    item.mod.classList.remove('active');
+                    item.st.innerText = "Status: Standby";
+                });
+
+                clearInterval(simulationTimer);
+                currentRoomTemp = 28.0;
+            }
+        }
+    </script>
+</body>
+</html>
